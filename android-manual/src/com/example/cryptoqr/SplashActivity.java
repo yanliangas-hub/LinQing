@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 /**
- * 启动页：判断设备激活与登录状态，自动跳转到对应页面。
+ * 启动页：判断登录状态，自动跳转到对应页面。
  */
-public class SplashActivity extends Activity implements Runnable, ApiClient.ApiCallback {
+public class SplashActivity extends Activity implements Runnable {
 
     private TextView statusText;
     private ApiClient apiClient;
@@ -23,7 +21,7 @@ public class SplashActivity extends Activity implements Runnable, ApiClient.ApiC
         statusText = findViewById(R.id.status_text);
         apiClient = new ApiClient(this);
 
-        statusText.setText("正在检查授权状态...");
+        statusText.setText("正在启动...");
 
         // 延迟 500ms 避免闪屏
         statusText.postDelayed(this, 500);
@@ -31,18 +29,7 @@ public class SplashActivity extends Activity implements Runnable, ApiClient.ApiC
 
     @Override
     public void run() {
-        apiClient.checkDevice(this);
-    }
-
-    @Override
-    public void onResult(boolean success, String message, JSONObject data) {
-        if (success && data != null && data.optBoolean("activated", false)) {
-            checkLoginState();
-        } else {
-            statusText.setText("需要激活设备");
-            startActivity(new Intent(SplashActivity.this, ActivationActivity.class));
-            finish();
-        }
+        checkLoginState();
     }
 
     private void checkLoginState() {
