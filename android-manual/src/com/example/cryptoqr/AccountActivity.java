@@ -140,7 +140,6 @@ public class AccountActivity extends Activity implements View.OnClickListener {
     private void showRenameDialog() {
         final EditText input = new EditText(this);
         input.setHint("请输入新用户名");
-        input.setTextColor(0xFF000000);
         input.setText(apiClient.getUsername());
         input.setSelection(input.getText().length());
 

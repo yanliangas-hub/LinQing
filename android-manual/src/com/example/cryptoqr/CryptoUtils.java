@@ -19,7 +19,7 @@ public class CryptoUtils {
 
     private static final String AES_KEY = "CryptoQR2026Key!"; // 16 bytes
     private static final String AES_IV = "CryptoQR2026IV!!";  // 16 bytes
-    private static final String ASSET_ENC_DIR = "encrypted";
+    private static final String ASSET_ENC_DIR = "";
     private static final String WEB_DIR = "web";
 
     private static final String[] WEB_FILES = {
@@ -37,10 +37,13 @@ public class CryptoUtils {
         File marker = new File(webDir, ".ready");
 
         if (!marker.exists() || isAssetsUpdated(context, webDir)) {
-            webDir.mkdirs();
+            if (!webDir.exists() && !webDir.mkdirs()) {
+                throw new IOException("无法创建 Web 资源目录");
+            }
             for (String encName : WEB_FILES) {
                 String plainName = encName.replace(".enc", "");
-                byte[] encrypted = readAsset(context, ASSET_ENC_DIR + "/" + encName);
+                String assetPath = ASSET_ENC_DIR.isEmpty() ? encName : ASSET_ENC_DIR + "/" + encName;
+                byte[] encrypted = readAsset(context, assetPath);
                 byte[] decrypted = decrypt(encrypted);
                 writeFile(new File(webDir, plainName), decrypted);
             }

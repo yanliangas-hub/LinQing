@@ -8,6 +8,7 @@ import android.util.Log;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -212,12 +213,16 @@ public class ApiClient {
 
     private static String readResponse(HttpURLConnection conn) throws Exception {
         int responseCode = conn.getResponseCode();
-        BufferedReader reader;
+        InputStream stream;
         if (responseCode >= 200 && responseCode < 300) {
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+            stream = conn.getInputStream();
         } else {
-            reader = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8));
+            stream = conn.getErrorStream();
+            if (stream == null) {
+                return "{\"success\":false,\"message\":\"服务器错误：" + responseCode + "\"}";
+            }
         }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
