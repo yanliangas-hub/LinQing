@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+
+# Build outputs
+android-manual/build/
+android-manual/out/
+android-manual/assets/*.enc
+crypto-qr.apk
+*.apk
+
+# Sensitive data
+backend/data.json
+android-manual/debug.keystore
+*.keystore
+.env
+.env.local
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
