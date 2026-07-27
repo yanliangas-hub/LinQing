@@ -96,6 +96,18 @@ public class ApiClient {
         post("/check-device", body, false, callback);
     }
 
+    // 设备自动登录（用设备 ID 替代账号密码）
+    public void deviceLogin(ApiCallback callback) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("device_id", getDeviceId(context));
+        } catch (Exception e) {
+            callback.onResult(false, "构造请求失败", null);
+            return;
+        }
+        post("/device-login", body, false, callback);
+    }
+
     // 登录
     public void login(String username, String password, ApiCallback callback) {
         JSONObject body = new JSONObject();

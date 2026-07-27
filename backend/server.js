@@ -153,6 +153,40 @@ app.post('/api/login', (req, res) => {
   });
 });
 
+// 设备自动登录：用设备 ID 替代账号密码
+app.post('/api/device-login', (req, res) => {
+  const { device_id } = req.body;
+  if (!device_id) {
+    return res.status(400).json({ success: false, message: '缺少设备ID' });
+  }
+
+  let user = db.get('users').find({ device_id }).value();
+
+  if (!user) {
+    const randomPassword = crypto.randomBytes(16).toString('hex');
+    user = {
+      id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+      username: device_id,
+      password_hash: bcrypt.hashSync(randomPassword, 10),
+      role: 'user',
+      membership_type: 'free',
+      level: 1,
+      points: 0,
+      expiry_date: 0,
+      device_id,
+      created_at: Math.floor(Date.now() / 1000)
+    };
+    db.get('users').push(user).write();
+  }
+
+  const token = generateToken(user);
+  res.json({
+    success: true,
+    message: '设备登录成功',
+    data: { token, user: cleanUser(getUserById(user.id)) }
+  });
+});
+
 // 获取用户信息
 app.get('/api/user', authMiddleware, (req, res) => {
   const user = getUserById(req.user.userId);
