@@ -13,14 +13,18 @@ PROJECT_DIR=$(pwd)
 BUILD_DIR=$PROJECT_DIR/build
 OUT_DIR=$PROJECT_DIR/out
 ASSETS_DIR=$PROJECT_DIR/assets
+WWW_DIR=$PROJECT_DIR/../www
 
-rm -rf $BUILD_DIR $OUT_DIR
+rm -rf $BUILD_DIR $OUT_DIR $ASSETS_DIR
 mkdir -p $BUILD_DIR $OUT_DIR $ASSETS_DIR
 
-# Encrypt web assets for source code protection
-rm -rf $ASSETS_DIR
-mkdir -p $ASSETS_DIR
-python3 $PROJECT_DIR/encrypt.py $PROJECT_DIR/../www $ASSETS_DIR
+# Copy plain web assets
+if [ -d "$WWW_DIR" ]; then
+    cp -r $WWW_DIR/* $ASSETS_DIR/
+else
+    echo "WWW directory not found: $WWW_DIR"
+    exit 1
+fi
 
 # Step 1: Compile resources with aapt2
 echo "Compiling resources..."
@@ -47,12 +51,6 @@ javac \
     -bootclasspath $PLATFORM/android.jar \
     -d $BUILD_DIR/classes \
     $PROJECT_DIR/src/com/example/cryptoqr/MainActivity.java \
-    $PROJECT_DIR/src/com/example/cryptoqr/ActivationActivity.java \
-    $PROJECT_DIR/src/com/example/cryptoqr/LoginActivity.java \
-    $PROJECT_DIR/src/com/example/cryptoqr/AccountActivity.java \
-    $PROJECT_DIR/src/com/example/cryptoqr/SplashActivity.java \
-    $PROJECT_DIR/src/com/example/cryptoqr/ApiClient.java \
-    $PROJECT_DIR/src/com/example/cryptoqr/CryptoUtils.java \
     $BUILD_DIR/com/example/cryptoqr/R.java
 
 # Step 4: Convert class files to DEX

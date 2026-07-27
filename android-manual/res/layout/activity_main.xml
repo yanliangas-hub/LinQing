@@ -9,14 +9,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageButton
-        android:id="@+id/account_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="16dp"
-        android:background="@drawable/round_button"
-        android:contentDescription="账户"
-        android:src="@android:drawable/ic_menu_myplaces" />
-
 </FrameLayout>

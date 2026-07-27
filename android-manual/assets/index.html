@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加密货币收款二维码生成器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>加密货币收款二维码生成器</h1>
+            <p class="subtitle">安全、快速生成比特币、以太坊、USDT 等收款二维码</p>
+        </header>
+
+        <main class="card">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="crypto-select">选择币种</label>
+                    <select id="crypto-select">
+                        <option value="bitcoin" data-symbol="BTC" data-scheme="bitcoin" data-network="Bitcoin">比特币 (BTC)</option>
+                        <option value="ethereum" data-symbol="ETH" data-scheme="ethereum" data-network="Ethereum">以太坊 (ETH)</option>
+                        <option value="litecoin" data-symbol="LTC" data-scheme="litecoin" data-network="Litecoin">莱特币 (LTC)</option>
+                        <option value="bitcoincash" data-symbol="BCH" data-scheme="bitcoincash" data-network="Bitcoin Cash">比特币现金 (BCH)</option>
+                        <option value="dogecoin" data-symbol="DOGE" data-scheme="dogecoin" data-network="Dogecoin">狗狗币 (DOGE)</option>
+                        <option value="usdt_trc20" data-symbol="USDT" data-scheme="tron" data-network="TRC20">USDT (TRC20 - 波场)</option>
+                        <option value="usdt_erc20" data-symbol="USDT" data-scheme="ethereum" data-network="ERC20">USDT (ERC20 - 以太坊)</option>
+                        <option value="usdt_bep20" data-symbol="USDT" data-scheme="bsc" data-network="BEP20">USDT (BEP20 - 币安智能链)</option>
+                        <option value="trx" data-symbol="TRX" data-scheme="tron" data-network="TRON">波场 (TRX)</option>
+                        <option value="bnb_bep20" data-symbol="BNB" data-scheme="bsc" data-network="BEP20">币安币 (BNB - BEP20)</option>
+                        <option value="solana" data-symbol="SOL" data-scheme="solana" data-network="Solana">索拉纳 (SOL)</option>
+                        <option value="ripple" data-symbol="XRP" data-scheme="ripple" data-network="XRP Ledger">瑞波币 (XRP)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="wallet-address">钱包地址</label>
+                    <input type="text" id="wallet-address" placeholder="请输入收款钱包地址" autocomplete="off">
+                    <span class="hint" id="address-hint">例如：bc1q... 或 0x...</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">收款金额 <span class="optional">(可选)</span></label>
+                    <input type="number" id="amount" placeholder="0.00" step="any" min="0">
+                </div>
+
+                <div class="form-group" id="memo-group" style="display: none;">
+                    <label for="memo">Memo / Tag <span class="optional">(可选)</span></label>
+                    <input type="text" id="memo" placeholder="部分交易所需要填写">
+                    <span class="hint">如 XRP、部分 USDT 交易所充值需要</span>
+                </div>
+
+                <button id="generate-btn" class="btn-primary">生成二维码</button>
+            </div>
+
+            <div class="result-section">
+                <div class="qr-wrapper">
+                    <div id="qrcode"></div>
+                    <div class="qr-placeholder" id="qr-placeholder">
+                        <span>二维码将显示在这里</span>
+                    </div>
+                </div>
+
+                <div class="payment-info" id="payment-info" style="display: none;">
+                    <div class="info-row">
+                        <span class="info-label">币种</span>
+                        <span class="info-value" id="info-crypto">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">地址</span>
+                        <span class="info-value break-all" id="info-address">-</span>
+                    </div>
+                    <div class="info-row" id="info-amount-row">
+                        <span class="info-label">金额</span>
+                        <span class="info-value" id="info-amount">-</span>
+                    </div>
+                </div>
+
+                <button id="download-btn" class="btn-secondary" disabled>下载二维码</button>
+            </div>
+        </main>
+
+        <footer>
+            <p class="warning">安全提示：请仔细核对收款地址，二维码内容仅本地生成，不会上传到服务器。</p>
+        </footer>
+    </div>
+
+    <script src="qrcode.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
